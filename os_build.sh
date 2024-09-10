@@ -1,3 +1,4 @@
+mkdir -p build
 echo "Building kernel..."
 echo "Building kernel.asm..."
 cd build
