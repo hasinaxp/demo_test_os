@@ -8,6 +8,7 @@ section     .text
 
 global _start
 extern kernel_main
+extern call_constructors
 _start:
     cli
     mov esp, os_stack_bottom
@@ -20,6 +21,7 @@ dw 0x55AA
 
 
 os_proc:
+    call call_constructors
     call kernel_main
     
 stop:
