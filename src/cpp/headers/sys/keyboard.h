@@ -10,18 +10,6 @@
 namespace sys
 {
 
-    const u8 VK_BACKSPACE = 0x0E;
-    const u8 VK_TAB = 0x0F;
-    const u8 VK_ENTER = 0x1C;
-    const u8 VK_LCTRL = 0x1D;
-    const u8 VK_LSHIFT = 0x2A;
-    const u8 VK_RSHIFT = 0x36;
-    const u8 VK_LALT = 0x38;
-    const u8 VK_CAPSLOCK = 0x3A;
-    const u8 VK_ESC = 0x01;
-    const u8 VK_SPACE = 0x39;
-    const u8 VK_F1 = 0x3B;
-
     struct
     {
         u8 shift = 0;
@@ -91,7 +79,7 @@ namespace sys
 
     void keyboard_init()
     {
-        sys::set_idt_gate(IRQ_KEYBOARD_IRQ, (u32)sys::handle_keyboard);
+        set_idt_gate(IRQ_KEYBOARD_IRQ, (u32)handle_keyboard);
 
         u8 mask = sys::port_read8(0x21); // Read the current mask
         mask &= ~0x02;                   // Unmask IRQ1 (keyboard)

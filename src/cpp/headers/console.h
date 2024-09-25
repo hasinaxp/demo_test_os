@@ -42,4 +42,22 @@ namespace sl
             }
         }
     }
+
+    void print(int x, int y, const char *str)
+    {
+        int pc = console_cursor;
+        console_cursor = y * CNSL_W + x;
+        print(str);
+        console_cursor = pc;
+    }
+
+    void clear_screen()
+    {
+        for (int i = 0; i < CNSL_W * CNSL_H * 2; i++)
+        {
+            video_memory[i] = 0;
+        }
+        console_cursor = 0;
+    }
+
 }

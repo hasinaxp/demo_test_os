@@ -6,7 +6,7 @@
 
 #define IDT_SIZE 256
 
-#define IRQ_TIMER_IRQ 32
+#define IRQ_CLOCK_IRQ 32
 #define IRQ_KEYBOARD_IRQ 33
 #define IRQ_MOUSE_IRQ 44
 
@@ -84,6 +84,24 @@ namespace sys
         }
     }
 
+    inline void remap_pic()
+    {
+        sys::port_write8(0x20, 0x11);
+        sys::port_write8(0xA0, 0x11);
+
+        sys::port_write8(0x21, 0x20);
+        sys::port_write8(0xA1, 0x28);
+
+        sys::port_write8(0x21, 0x04);
+        sys::port_write8(0xA1, 0x02);
+
+        sys::port_write8(0x21, 0x01);
+        sys::port_write8(0xA1, 0x01);
+
+        sys::port_write8(0x21, 0x0);
+        sys::port_write8(0xA1, 0x0);
+    }
+
     inline void idt_install()
     {
         idt_descriptor.limit = sizeof(idt) - 1;
@@ -96,36 +114,8 @@ namespace sys
 
     inline void activate_interrupts()
     {
+        remap_pic();
         enable_interrupts();
-        sl::print("Interrupts activated\n");
-
-        // setup chips
-        sys::port_write8(0x20, 0x11);
-        sys::port_write8(0xA0, 0x11);
-
-        // set offsets
-        sys::port_write8(0x21, 0x20);
-        sys::port_write8(0xA1, 0x28);
-
-        // setup cascade
-        sys::port_write8(0x21, 0x04);
-        sys::port_write8(0xA1, 0x02);
-
-        // setup mode
-        sys::port_write8(0x21, 0x01);
-        sys::port_write8(0xA1, 0x01);
-
-        // // enable interrupts
-        // sys::port_write8(0x21, 0x00);
-        // sys::port_write8(0xA1, 0x00);
-
-        // enable keyboard interrupt
-        sys::port_write8(0x21, 0x01);
-
-        u8 mask = sys::port_read8(0x21); // Read the current mask
-        mask &= ~0x02;                   // Unmask IRQ1 (keyboard)
-        sys::port_write8(0x21, mask);    // Write the new mask back to the PIC
-
         sl::print("Interrupts enabled\n");
     }
 

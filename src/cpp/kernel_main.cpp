@@ -4,6 +4,9 @@
 #include "headers/sys/port.h"
 #include "headers/sys/interrupt.h"
 #include "headers/sys/keyboard.h"
+#include "headers/sys/events.h"
+#include "headers/sys/clock.h"
+#include "headers/sys/mouse.h"
 
 char *video_memory = (char *)0xb8000;
 
@@ -30,12 +33,18 @@ extern "C" void call_constructors()
 
 void init_systems()
 {
+    sl::clear_screen();
     sys::gdt_install();
     sys::idt_init();
+
     sys::keyboard_init();
+    sys::clock_init();
+
+    sys::mouse_init();
 
     sys::idt_install();
     sys::activate_interrupts();
+    // sl::clear_screen();
 
     sl::print("System initialized\n");
 }
