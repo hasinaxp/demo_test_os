@@ -72,4 +72,28 @@ namespace sl
         }
     }
 
+    inline void to_hex_str(u32 val, cstr buf)
+    {
+        u32 i = 0;
+        do
+        {
+            u32 digit = val & 0xF;
+            buf[i++] = digit < 10 ? digit + '0' : digit - 10 + 'A';
+            val >>= 4;
+        } while (val);
+
+        buf[i] = '\0';
+
+        i--;
+        u32 j = 0;
+        while (j < i)
+        {
+            char temp = buf[j];
+            buf[j] = buf[i];
+            buf[i] = temp;
+            j++;
+            i--;
+        }
+    }
+
 }

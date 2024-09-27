@@ -18,8 +18,6 @@ SECTIONS
     }
     .bss : {
         *(.bss) 
-        _end = .;
     }
-    .heap_start = _end + 0x800;
-    PROVIDE(_heap_start = .heap_start);
+    _end_of_kernel = .;
 }

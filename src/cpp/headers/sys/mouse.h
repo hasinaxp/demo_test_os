@@ -3,12 +3,16 @@
 #include "port.h"
 #include "interrupt.h"
 
+#define SYS_MOUSE_PRESS 1
+#define SYS_MOUSE_RELEASE 0
+
 namespace sys
 {
-    static u8 mouse_cycle = 0; // Static for persistence across interrupts
+    static u8 mouse_cycle = 0;
     static u8 mouse_byte[3];
-    static i32 mouse_x = 0; // Use signed integers to avoid overflow
+    static i32 mouse_x = 0;
     static i32 mouse_y = 0;
+    static u8 mouse_buttons[3] = {0};
 
     char mtext[256];
 
@@ -38,6 +42,11 @@ namespace sys
                     sl::to_str(mouse_y, mtext);
                     sl::print(mtext);
                     sl::print("\n");
+
+                    for (u8 i = 0; i < 3; i++)
+                    {
+                        mouse_buttons[i] = (mouse_byte[0] >> i) & 1;
+                    }
                 }
             }
         }

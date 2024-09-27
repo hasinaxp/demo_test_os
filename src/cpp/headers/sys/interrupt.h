@@ -102,21 +102,22 @@ namespace sys
         sys::port_write8(0xA1, 0x0);
     }
 
+    inline void activate_interrupts()
+    {
+        remap_pic();
+        enable_interrupts();
+        sl::print("Interrupts enabled\n");
+    }
+
     inline void idt_install()
     {
         idt_descriptor.limit = sizeof(idt) - 1;
         idt_descriptor.base = (u32)&idt;
 
         asm volatile("lidt %0" : : "m"(idt_descriptor));
+        activate_interrupts();
 
         sl::print("IDT installed\n");
-    }
-
-    inline void activate_interrupts()
-    {
-        remap_pic();
-        enable_interrupts();
-        sl::print("Interrupts enabled\n");
     }
 
 }

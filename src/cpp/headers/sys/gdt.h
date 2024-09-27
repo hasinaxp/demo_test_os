@@ -6,7 +6,7 @@
 namespace sys
 {
 
-    struct seg_desc
+    typedef struct
     {
         u16 limit_lo;
         u16 base_lo;
@@ -14,15 +14,15 @@ namespace sys
         u8 type;
         u8 limit_hi;
         u8 base_vhi;
-    } __attribute__((packed));
+    } __attribute__((packed)) seg_desc;
 
-    struct gdt_ptr
+    typedef struct
     {
         u16 limit;
         u32 base;
-    } __attribute__((packed));
+    } __attribute__((packed)) gdt_ptr;
 
-    struct tss_entry
+    typedef struct
     {
         u32 prev_tss;
         u32 esp0;
@@ -51,12 +51,11 @@ namespace sys
         u32 ldt;
         u16 trap;
         u16 iomap_base;
-    } __attribute__((packed));
+    } __attribute__((packed)) tss_entry;
 
-    struct seg_desc os_gdt[GDT_SIZE] = {0};
-    struct gdt_ptr os_gdt_ptr = {0};
-
-    struct tss_entry os_tss = {0};
+    seg_desc os_gdt[GDT_SIZE] = {0};
+    gdt_ptr os_gdt_ptr = {0};
+    tss_entry os_tss = {0};
 
     inline void gdt_set_gate(i32 num, u32 base, u32 limit, u8 access, u8 gran)
     {
@@ -111,5 +110,5 @@ namespace sys
                      "next:");
 
         asm volatile("ltr %%ax" : : "a"(0x28));
-        }
+    }
 }

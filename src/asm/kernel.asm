@@ -22,11 +22,21 @@ dw 0x55AA
 
 os_proc:
     call call_constructors
+    
+    mov [magic], eax        ; Store magic number in memory
+    mov [mbi], ebx          ; Store mbi pointer in memory
+
+    push dword [mbi]        ; Push mbi pointer onto the stack
+    push dword [magic]      ; Push magic number onto the stack
     call kernel_main
     
 stop:
     jmp stop
+
+
 section .bss
+    magic: resd 1               ; Reserve space for magic number
+    mbi:   resd 1               ; Reserve space for mbi pointer
     resb 8192
 os_stack_bottom:
 

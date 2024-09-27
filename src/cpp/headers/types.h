@@ -6,6 +6,28 @@
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
+#define abs(x) ((x) < 0 ? -(x) : (x))
+#define swap(x, y)          \
+    do                      \
+    {                       \
+        typeof(x) temp = x; \
+        x = y;              \
+        y = temp;           \
+    } while (0)
+
+#define offsetof(type, member) ((size_t) & (((type *)0)->member))
+
+#define va_start(vl, last) __builtin_va_start(vl, last)
+#define va_arg(vl, type) __builtin_va_arg(vl, type)
+#define va_end(vl) __builtin_va_end(vl)
+#if defined(__GNUC__) || defined(__clang__)
+#define likely(x) __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+#else
+#define likely(x) (x)
+#define unlikely(x) (x)
+#endif
+#define HALT_CPU() __asm__ __volatile__("hlt")
 
 typedef int i32;
 typedef unsigned int u32;
